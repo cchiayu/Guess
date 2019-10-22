@@ -12,73 +12,82 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ImageView;
+import android.widget.TextView;
 import java.util.Random;
-
-import static com.tom.guess.R.id.button;
-import static com.tom.guess.R.id.num;
 
 public class MainActivity extends AppCompatActivity {
 
     String TAG = MainActivity.class.getSimpleName();
-    int secret = new Random().nextInt(10)+1;
+    int secret = new Random().nextInt(10) + 1;
     private ImageView result;
     private TextView number;
-    int tester ;
+    private EditText num;
+    int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "secret" +secret);
+        Log.d(TAG, "secret" + secret);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        num = findViewById(R.id.num);
 
-       result = findViewById(R.id.result_image);
-       FloatingActionButton fab = findViewById(R.id.fab);
+        result = findViewById(R.id.result_image);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-                    public void onClick(View view) {
-                        result.setAlpha(1.0f);
-                        result.setVisibility((View.VISIBLE));
+            public void onClick(View view) {
+                result.setAlpha(1.0f);
+                result.setVisibility((View.VISIBLE));
 
-                        if (num == secret) {
-                            Toast.makeText(MainActivity.this, "GOOD", Toast.LENGTH_LONG).show();
-                            result.setImageResource(R.drawable.shock);
-                        } else{
-                            result.setImageResource(R.drawable.smile);
-                            result.animate().alpha(0.0f).setDuration(1200);
-
-                        }
-                    }
-
-
-
+            }
         });
+    }
+
+    public void guess(View view) {
+        int n = Integer.parseInt(num.getText().toString());
+        num.setText(Integer.toString(n));
+        if (n < secret) {
+            Toast.makeText(MainActivity.this, "Bigger", Toast.LENGTH_SHORT).show();
+            result.setVisibility((View.VISIBLE));
+            result.setImageResource(R.drawable.smile);
+        } else if (n > secret) {
+            Toast.makeText(MainActivity.this, "Smaller", Toast.LENGTH_SHORT).show();
+            result.setVisibility((View.VISIBLE));
+            result.setImageResource(R.drawable.smile);
+        } else {
+            Toast.makeText(MainActivity.this, "You got it!", Toast.LENGTH_SHORT).show();
+            result.setVisibility((View.VISIBLE));
+            result.setImageResource(R.drawable.shock);
         }
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void zero(View view) {
+        counter = 0;
+        number.setText(String.valueOf(counter));
     }
 }
