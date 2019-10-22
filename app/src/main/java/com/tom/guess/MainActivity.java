@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView result;
     private TextView number;
     private EditText num;
-    int counter;
+    String counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 result.setAlpha(1.0f);
                 result.setVisibility((View.VISIBLE));
-
+                //counter = " ";
+               // number.setText(counter);
+                //計數清零
             }
         });
     }
@@ -86,8 +88,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void zero(View view) {
-        counter = 0;
-        number.setText(String.valueOf(counter));
-    }
 }
