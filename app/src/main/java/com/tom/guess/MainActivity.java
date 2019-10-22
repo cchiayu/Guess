@@ -8,28 +8,57 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Random;
+
+import static com.tom.guess.R.id.button;
+import static com.tom.guess.R.id.num;
 
 public class MainActivity extends AppCompatActivity {
+
+    String TAG = MainActivity.class.getSimpleName();
+    int secret = new Random().nextInt(10)+1;
+    private ImageView result;
+    private TextView number;
+    int tester ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "secret" +secret);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+       result = findViewById(R.id.result_image);
+       FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+                    public void onClick(View view) {
+                        result.setAlpha(1.0f);
+                        result.setVisibility((View.VISIBLE));
+
+                        if (num == secret) {
+                            Toast.makeText(MainActivity.this, "GOOD", Toast.LENGTH_LONG).show();
+                            result.setImageResource(R.drawable.shock);
+                        } else{
+                            result.setImageResource(R.drawable.smile);
+                            result.animate().alpha(0.0f).setDuration(1200);
+
+                        }
+                    }
+
+
+
         });
-    }
+        }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
