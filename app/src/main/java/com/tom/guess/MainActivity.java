@@ -1,10 +1,12 @@
 package com.tom.guess;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -16,57 +18,105 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
     String TAG = MainActivity.class.getSimpleName();
-    int secret = new Random().nextInt(10) + 1;
+    int secret;
     private ImageView result;
-    private TextView number;
+    int counter;
     private EditText num;
-    String counter;
+    private TextView edCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "secret" + secret);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         num = findViewById(R.id.num);
-
+        edCounter = findViewById(R.id.counter);
+        edCounter.setText(String.valueOf(counter));
+        edCounter.setText(counter +"");
         result = findViewById(R.id.result_image);
+        reset();
+        Log.d(TAG, "secret" + secret);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                result.setAlpha(1.0f);
-                result.setVisibility((View.VISIBLE));
                 //counter = " ";
                // number.setText(counter);
                 //計數清零
             }
         });
+
+    }
+    public void reset(){
+        secret = new Random().nextInt(10)+1;
+        counter = 0;
+        edCounter.setText(counter+"");
     }
 
     public void guess(View view) {
         int n = Integer.parseInt(num.getText().toString());
+        counter++;
+        edCounter.setText(counter+"");
+        DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reset();
+            }
+        };
+        String message = " jo li hi";
         num.setText(Integer.toString(n));
         if (n < secret) {
-            Toast.makeText(MainActivity.this, "Bigger", Toast.LENGTH_SHORT).show();
-            result.setVisibility((View.VISIBLE));
-            result.setImageResource(R.drawable.smile);
+            message = "Bigger";
+            listener = null;
+
+           /*new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("HEY!")
+                    .setMessage("Bigger")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            secret = new Random().nextInt(10)+1;
+                            counter = 0;
+                            reset();
+                        }
+                    })
+                    .show();*/
+           // result.setVisibility((View.VISIBLE));
+           // result.setImageResource(R.drawable.smile);
+            //Toast.makeText(MainActivity.this, "Bigger", Toast.LENGTH_SHORT).show(); 彈窗通知
+
         } else if (n > secret) {
-            Toast.makeText(MainActivity.this, "Smaller", Toast.LENGTH_SHORT).show();
-            result.setVisibility((View.VISIBLE));
-            result.setImageResource(R.drawable.smile);
-        } else {
-            Toast.makeText(MainActivity.this, "You got it!", Toast.LENGTH_SHORT).show();
-            result.setVisibility((View.VISIBLE));
-            result.setImageResource(R.drawable.shock);
+            message = "smaller";
+            listener = null;
+          /* new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("HEY!")
+                    .setMessage("Smaller")
+                    .setPositiveButton("OK",null)
+                    .show();*/
+            //Toast.makeText(MainActivity.this, "Smaller", Toast.LENGTH_SHORT).show();
+           // result.setVisibility((View.VISIBLE));
+            //result.setImageResource(R.drawable.smile);
         }
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("HEY!")
+                    .setMessage(message)
+                    .setPositiveButton("OK",listener)
+                    .show();
+           // Toast.makeText(MainActivity.this, "You got it!", Toast.LENGTH_SHORT).show();
+            //result.setVisibility((View.VISIBLE));
+            //result.setImageResource(R.drawable.shock);
+
+
 
     }
 
